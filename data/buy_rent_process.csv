@@ -1,0 +1,2 @@
+process_id,customer_id,date,amount,car_id,type
+1,2,2025-12-08 19:04:28,32000.0,2,buy

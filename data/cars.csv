@@ -1,0 +1,4 @@
+id,make,model,year,price,installment,showroom_id,available
+1,Toyota,Camry,2023,29500.0,1,1,0
+2,Honda,Accord,2024,32000.0,1,1,0
+3,Ford,Mustang,2023,45000.0,0,1,1
