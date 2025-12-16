@@ -4,10 +4,7 @@ import storage
 import search_utils
 
 
-# ============================================================================
-# AUTHENTICATION FUNCTIONS
-# ============================================================================
-
+#authentication functions
 def customer_register(username, password, phone):
     """Register a new customer account."""
     #check if the customer exists or not
@@ -42,10 +39,7 @@ def customer_login(username, password):
         print("Incorrect password.")
         return None        
 
-# ============================================================================
-# CAR BROWSING AND SEARCH FUNCTIONS
-# ============================================================================
-
+#car browsing and search functions
 def browse_all_cars():
     """Display all available cars."""
     cars = storage.get_all_cars()
@@ -143,10 +137,7 @@ def view_car_details(car_id):
     return car
 
 
-# ============================================================================
-# SHOWROOM AND GARAGE VIEWING
-# ============================================================================
-
+#showroom and garage viewing
 def view_showrooms():
     """Display all showrooms."""
     showrooms = storage.get_all_showrooms()
@@ -251,10 +242,7 @@ def view_services_in_garage(garage_id):
     return services
 
 
-# ============================================================================
-# CAR PURCHASE FUNCTIONS
-# ============================================================================
-
+#car purchase functions
 def buy_car(customer_id, car_id):
     """Process a car purchase."""
     #get car 
@@ -390,12 +378,41 @@ def cancel_reservation(customer_id, reservation_id):
     return True
 
 
-# ============================================================================
-# SERVICE BOOKING
-# ============================================================================
+#service booking
+def view_my_service_requests(customer_id):
+    """View customer's service requests in the queue."""
+    queue = storage.service_request_queue
+    
+    customer_requests = [req for req in queue if req['customer_id'] == customer_id]
+    
+    if not customer_requests:
+        print("\n You have no pending service requests in the queue.")
+        return []
+    
+    print(f"\n Your Service Requests ({len(customer_requests)} pending):")
+    print("=" * 80)
+    
+    for req in customer_requests:
+        service = storage.get_service_by_id(req['service_id'])
+        garage = storage.get_garage_by_id(req['garage_id'])
+        position = queue.index(req) + 1
+        
+        service_name = service.name if service else f"Service #{req['service_id']}"
+        garage_name = garage.name if garage else f"Garage #{req['garage_id']}"
+        
+        print(f"Request #{req['request_id']}")
+        print(f"  Position in Queue: {position}")
+        print(f"  Service: {service_name}")
+        print(f"  Garage: {garage_name}")
+        print(f"  Status: {req['status']}")
+        print(f"  Requested: {req['timestamp']}")
+        print("-" * 80)
+    
+    return customer_requests
+
 
 def book_service(customer_id, service_id, garage_id):
-    """Book a service at a garage."""
+    """Book a service at a garage by adding to service request queue."""
     service = storage.get_service_by_id(service_id)
 
     if not service:
@@ -412,35 +429,21 @@ def book_service(customer_id, service_id, garage_id):
         print(f" Service ID {service_id} is not offered at Garage ID {garage_id}.")
         return False
     
-    process_id = storage.next_id_for("service_process")
-    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    request_id = storage.enqueue_service_request(customer_id, service_id, garage_id)
+    queue_position = storage.get_queue_size()
 
-    service_process = ServiceProcess(
-        process_id = process_id,
-        customer_id = customer_id,
-        date = date,
-        amount = service.price,
-        service_id = service_id,
-        garage_id = garage_id,
-    )
-
-    storage.add_service_process(service_process)
-    storage.save_service_processes(service_process)
-
-    print(f"\n Service booked successfully!")
+    print(f"\n Service request submitted successfully!")
     print(f" Service: {service.name}")
     print(f" Garage: {garage.name}")
     print(f" Location: {garage.location}")
-    print(f" Price: ${service.price:.2f}")
-    print(f" Date: {date}")
-    print(f" Booking ID: {process_id}")
+    print(f" Estimated Price: ${service.price:.2f}")
+    print(f" Request ID: {request_id}")
+    print(f" Queue Position: {queue_position}")
+    print(f"\n Your service will be processed in order. Check your queue status!")
     
     return True
 
-# ============================================================================
-# HISTORY AND PROFILE
-# ============================================================================
-
+#history and profile
 def view_customer_history(customer_id):
     """Display customer's complete transaction history."""
 
@@ -507,10 +510,7 @@ def view_customer_history(customer_id):
     print(f"Total Spent: ${total_spent:,.2f}")
     print("=" * 80)
 
-# ============================================================================
-# CUSTOMER MENU
-# ============================================================================
-
+#customer menu
 def customer_menu(customer):
     """Main customer menu interface."""
     
@@ -530,11 +530,12 @@ def customer_menu(customer):
         print("10. Reserve a Car")
         print("11. Cancel Reservation")
         print("12. Book a Service")
-        print("13. View My History")
-        print("14. Logout")
+        print("13. View My Service Requests (Queue)")
+        print("14. View My History")
+        print("15. Logout")
         print("=" * 60)
         
-        choice = input("Enter your choice (1-14): ").strip()
+        choice = input("Enter your choice (1-15): ").strip()
         
         try:
             if choice == '1':
@@ -584,14 +585,17 @@ def customer_menu(customer):
                 book_service(customer.id, service_id, garage_id)
             
             elif choice == '13':
-                view_customer_history(customer.id)
+                view_my_service_requests(customer.id)
             
             elif choice == '14':
+                view_customer_history(customer.id)
+            
+            elif choice == '15':
                 print("\n Logging out... Goodbye!")
                 break
             
             else:
-                print("\n Invalid choice. Please enter a number between 1-14.")
+                print("\n Invalid choice. Please enter a number between 1-15.")
         
         except ValueError as e:
             print(f"\n Invalid input. Please enter a valid number.")
@@ -600,10 +604,7 @@ def customer_menu(customer):
             print("   Please try again.")
 
 
-# ============================================================================
-# MAIN AUTHENTICATION FLOW
-# ============================================================================
-
+#main authentication flow
 def main_customer_flow():
     """Main customer authentication and menu flow."""
     while True:
