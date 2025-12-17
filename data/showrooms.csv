@@ -1,2 +1,4 @@
 id,name,location,phone,car_ids
-1,Downtown Auto Gallery,123 Main Street, Cairo,555-0100,1;2;3
+1,Downtown Auto Mall,123 Main St,555-0101,1;2;5;9
+2,Luxury Motors,456 Oak Ave,555-0202,3;4;7
+3,EcoFriendly Cars,789 Green Blvd,555-0303,6;8;10

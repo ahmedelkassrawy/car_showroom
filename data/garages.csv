@@ -1,2 +1,4 @@
 id,name,location,phone,service_ids
-1,Premium Service Center,456 Service Road, Cairo,555-0200,1;2;3;4
+1,Quick Fix Auto,321 Repair Rd,555-1001,1;2;3;4
+2,Premium Service Center,654 Service Ln,555-1002,1;2;5;6
+3,Budget Auto Care,987 Economy St,555-1003,2;3;4

@@ -1,0 +1,6 @@
+action_id,admin_id,action_type,entity_type,entity_id,timestamp,details
+1,1,add,car,1,2024-12-10 08:00:00,Toyota Camry
+2,1,add,car,2,2024-12-10 08:15:00,Honda Accord
+3,1,add,showroom,1,2024-12-10 08:30:00,Downtown Auto Mall
+4,1,add,garage,1,2024-12-10 09:00:00,Quick Fix Auto
+5,1,add,service,8,2025-12-17 18:01:37,car engine check

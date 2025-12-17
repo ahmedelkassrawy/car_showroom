@@ -7,7 +7,7 @@ from models import (
 )
 
 #files
-DATA_DIR = "data"
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 FILES = {
     "cars": os.path.join(DATA_DIR, "cars.csv"),
@@ -704,6 +704,67 @@ def get_all_buy_rent_processes():
 def get_all_service_processes():
     """Return a list of all service processes."""
     return list(service_history)
+
+#id generators
+def get_next_car_id():
+    """Generate the next available car ID."""
+    if not cars_by_id:
+        return 1
+    return max(cars_by_id.keys()) + 1
+
+def get_next_customer_id():
+    """Generate the next available customer ID."""
+    if not customers_by_id:
+        return 1
+    return max(customers_by_id.keys()) + 1
+
+def get_next_showroom_id():
+    """Generate the next available showroom ID."""
+    if not showrooms_by_id:
+        return 1
+    return max(showrooms_by_id.keys()) + 1
+
+def get_next_garage_id():
+    """Generate the next available garage ID."""
+    if not garages_by_id:
+        return 1
+    return max(garages_by_id.keys()) + 1
+
+def get_next_service_id():
+    """Generate the next available service ID."""
+    if not services_by_id:
+        return 1
+    return max(services_by_id.keys()) + 1
+
+def get_next_reservation_id():
+    """Generate the next available reservation ID."""
+    if not reservations_by_id:
+        return 1
+    return max(reservations_by_id.keys()) + 1
+
+def get_next_buy_rent_process_id():
+    """Generate the next available buy/rent process ID."""
+    if not buy_rent_history:
+        return 1
+    return max(p.id for p in buy_rent_history) + 1
+
+def get_next_service_process_id():
+    """Generate the next available service process ID."""
+    if not service_history:
+        return 1
+    return max(p.id for p in service_history) + 1
+
+def get_next_service_request_id():
+    """Generate the next available service request ID."""
+    if not service_request_queue:
+        return 1
+    return max(req['request_id'] for req in service_request_queue) + 1
+
+def get_next_admin_action_id():
+    """Generate the next available admin action ID."""
+    if not admin_action_stack:
+        return 1
+    return max(action['action_id'] for action in admin_action_stack) + 1
 
 #crud helpers for cars
 def add_car(car_object):
