@@ -72,21 +72,21 @@ def search_cars_interactive():
         try:
             filters['year'] = int(year)
         except ValueError:
-            print("Invalid year, skipping...")
+            print("Invalid year, skipping")
 
     min_price = input("Minimum Price (e.g., 20000): ").strip()
     if min_price:
         try:
             filters['min_price'] = float(min_price)
         except ValueError:
-            print("⚠️  Invalid min price, skipping...")
+            print("  Invalid min price, skipping")
     
     max_price = input("Maximum Price (e.g., 50000): ").strip()
     if max_price:
         try:
             filters['max_price'] = float(max_price)
         except ValueError:
-            print("⚠️  Invalid max price, skipping...")
+            print("  Invalid max price, skipping")
     
     installment = input("Installment available? (yes/no): ").strip().lower()
     if installment in ['yes', 'y']:
@@ -107,7 +107,7 @@ def search_cars_interactive():
     print(f"\n Found {len(results)} car(s):")
     print("=" * 100)
     for i, car in enumerate(results, 1):
-        installment_text = "✓ Installment" if car.installment else "Cash Only"
+        installment_text = " Installment" if car.installment else "Cash Only"
         print(f"{i}. ID: {car.id} | {car.make} {car.model} ({car.year})")
         print(f"  ${car.price:,.2f} | {installment_text}")
         print("-" * 100)
@@ -272,7 +272,7 @@ def buy_car(customer_id, car_id):
 
     storage.update_car(car_id,available = False)
 
-    print(f"\n Congratulations! You have successfully purchased:")
+    print(f"\n Congratulations You have successfully purchased:")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Amount Paid: ${car.price:,.2f}")
     print(f" Date: {date}")
@@ -311,7 +311,7 @@ def rent_car(customer_id, car_id):
 
     storage.update_car(car_id,available = False)
 
-    print(f"\n Congratulations! You have successfully rented:")
+    print(f"\n Congratulations You have successfully rented:")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Rental Amount: ${rent_amount:,.2f}")
     print(f" Date: {date}")
@@ -345,12 +345,12 @@ def reserve_car(customer_id, car_id, hours=24):
     storage.save_reservations(reservation)
     storage.update_car(car_id, available=0)
 
-    print(f"\n Car reserved successfully!")
+    print(f"\n Car reserved successfully")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Duration: {hours} hour(s)")
     print(f" Expires: {reservation.end_time.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f" Reservation ID: {reservation_id}")
-    print(f"\n  Please complete your purchase within {hours} hours!")
+    print(f"\n  Please complete your purchase within {hours} hours")
     
     return True
 
@@ -371,7 +371,7 @@ def cancel_reservation(customer_id, reservation_id):
     car = storage.get_car_by_id(reservation.car_id)
     storage.update_car(car.id, available=1)
 
-    print(f"\n Reservation cancelled successfully!")
+    print(f"\n Reservation cancelled successfully")
     if car.id:
         print(f"{car.make} {car.model} is now available again.")
     
@@ -432,14 +432,14 @@ def book_service(customer_id, service_id, garage_id):
     request_id = storage.enqueue_service_request(customer_id, service_id, garage_id)
     queue_position = storage.get_queue_size()
 
-    print(f"\n Service request submitted successfully!")
+    print(f"\n Service request submitted successfully")
     print(f" Service: {service.name}")
     print(f" Garage: {garage.name}")
     print(f" Location: {garage.location}")
     print(f" Estimated Price: ${service.price:.2f}")
     print(f" Request ID: {request_id}")
     print(f" Queue Position: {queue_position}")
-    print(f"\n Your service will be processed in order. Check your queue status!")
+    print(f"\n Your service will be processed in order. Check your queue status")
     
     return True
 
@@ -516,7 +516,7 @@ def customer_menu(customer):
     
     while True:
         print(f"\n{'='*60}")
-        print(f" Welcome, {customer.username}!")
+        print(f" Welcome, {customer.username}")
         print(f"{'='*60}")
         print("1.  Browse All Available Cars")
         print("2.  Search Cars (Advanced)")
@@ -591,7 +591,7 @@ def customer_menu(customer):
                 view_customer_history(customer.id)
             
             elif choice == '15':
-                print("\n Logging out... Goodbye!")
+                print("\n Logging out Goodbye")
                 break
             
             else:
@@ -628,9 +628,9 @@ def main_customer_flow():
             if username and password and phone:
                 customer = customer_register(username, password, phone)
                 if customer:
-                    input("\nPress Enter to continue to login...")
+                    input("\nPress Enter to continue to login")
             else:
-                print("All fields are required!")
+                print("All fields are required")
         
         elif choice == '2':
             print("\n Customer Login")
@@ -643,10 +643,10 @@ def main_customer_flow():
                 if customer:
                     customer_menu(customer)
             else:
-                print("Username and password are required!")
+                print("Username and password are required")
         
         elif choice == '3':
-            print("\n Thank you for visiting! Goodbye!")
+            print("\n Thank you for visiting Goodbye")
             break
         
         else:

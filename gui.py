@@ -4,14 +4,8 @@ import storage
 import models
 from datetime import datetime
 
-# Initialize data
 storage.ensure_data_directory()
-# We need to call load_all_data, but first we need to make sure the files exist.
-# storage.py usually handles this in its initialization or we might need to call init functions.
-# Let's check if there is an init function.
-# Looking at storage.py, it has ensure_data_directory and ensure_file_exists.
-# But usually load_all_data calls them or they are called at module level?
-# Let's assume we just need to call load_all_data()
+
 try:
     storage.load_all_data()
 except Exception as e:
@@ -24,7 +18,7 @@ class CarShowroomApp(tk.Tk):
         self.geometry("1000x700")
         
         self.current_user = None
-        self.user_type = None # 'admin' or 'customer'
+        self.user_type = None #admin or customer
 
         self.container = tk.Frame(self)
         self.container.pack(side="top", fill="both", expand=True)
@@ -34,7 +28,7 @@ class CarShowroomApp(tk.Tk):
         self.show_frame("LoginScreen")
 
     def show_frame(self, frame_name, **kwargs):
-        # Clear the container
+        #clear container
         for widget in self.container.winfo_children():
             widget.destroy()
         

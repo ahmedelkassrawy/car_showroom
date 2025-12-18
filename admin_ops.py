@@ -2,16 +2,15 @@ from datetime import datetime
 from models import Admin, Car, Showroom, Garage, Service, ServiceProcess
 import storage
 
-
 #authentication functions
 def admin_login(username, password):
     """Admin login with hardcoded credentials."""
     if username == "admin" and password == "admin123":
         admin = Admin(id=1, username=username, password=password)
-        print("✓ Admin login successful!")
+        print("Admin login successful")
         return admin
     else:
-        print("✗ Invalid admin credentials!")
+        print(" Invalid admin credentials")
         return None
 
 
@@ -53,7 +52,7 @@ def add_new_car(admin_id):
         #check if showroom exists
         showroom = storage.get_showroom_by_id(showroom_id)
         if not showroom:
-            print(f"\n✗ Showroom with ID {showroom_id} not found.")
+            print(f"\n Showroom with ID {showroom_id} not found.")
             return False
         
         car_id = storage.next_id_for("car")
@@ -76,14 +75,14 @@ def add_new_car(admin_id):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "car", car_id, f"{make} {model}")
             
-            print(f"\n✓ Car added successfully! Car ID: {car_id}")
+            print(f"\n Car added successfully Car ID: {car_id}")
             return True
         else:
-            print("\n✗ Failed to add car.")
+            print("\n Failed to add car.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -98,7 +97,7 @@ def update_car_details():
         car = storage.get_car_by_id(car_id)
         
         if not car:
-            print(f"\n✗ Car with ID {car_id} not found.")
+            print(f"\n Car with ID {car_id} not found.")
             return False
         
         print(f"\nCurrent: {car.make} {car.model} ({car.year}) - ${car.price:,.2f}")
@@ -112,14 +111,14 @@ def update_car_details():
         price = float(price_input) if price_input else car.price
         
         if storage.update_car(car_id, make=make, model=model, year=year, price=price):
-            print(f"\n✓ Car updated successfully!")
+            print(f"\n Car updated successfully")
             return True
         else:
-            print("\n✗ Failed to update car.")
+            print("\n Failed to update car.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -130,7 +129,7 @@ def delete_car_admin(admin_id):
         car = storage.get_car_by_id(car_id)
         
         if not car:
-            print(f"\n✗ Car with ID {car_id} not found.")
+            print(f"\n Car with ID {car_id} not found.")
             return False
         
         confirm = input(f"Delete {car.make} {car.model} ({car.year})? (yes/no): ").strip().lower()
@@ -140,17 +139,17 @@ def delete_car_admin(admin_id):
             if storage.delete_car(car_id):
                 #record action in stack
                 storage.push_admin_action(admin_id, "delete", "car", car_id, car_info)
-                print(f"\n✓ Car deleted successfully!")
+                print(f"\n Car deleted successfully")
                 return True
             else:
-                print("\n✗ Failed to delete car.")
+                print("\n Failed to delete car.")
                 return False
         else:
             print("\n Deletion cancelled.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -177,7 +176,7 @@ def view_customer_details(customer_id):
     customer = storage.get_customer_by_id(customer_id)
     
     if not customer:
-        print(f"\n✗ Customer with ID {customer_id} not found.")
+        print(f"\n Customer with ID {customer_id} not found.")
         return None
     
     print(f"\n Customer Details (ID: {customer.id})")
@@ -209,7 +208,7 @@ def delete_customer_admin(admin_id):
         customer = storage.get_customer_by_id(customer_id)
         
         if not customer:
-            print(f"\n✗ Customer with ID {customer_id} not found.")
+            print(f"\n Customer with ID {customer_id} not found.")
             return False
         
         confirm = input(f"Delete customer '{customer.username}'? (yes/no): ").strip().lower()
@@ -218,17 +217,17 @@ def delete_customer_admin(admin_id):
             if storage.delete_customer(customer_id):
                 #record action in stack
                 storage.push_admin_action(admin_id, "delete", "customer", customer_id, customer.username)
-                print(f"\n✓ Customer deleted successfully!")
+                print(f"\n Customer deleted successfully")
                 return True
             else:
-                print("\n✗ Failed to delete customer.")
+                print("\n Failed to delete customer.")
                 return False
         else:
             print("\n Deletion cancelled.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -275,14 +274,14 @@ def add_new_showroom(admin_id):
         if storage.add_showroom(showroom):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "showroom", showroom_id, name)
-            print(f"\n✓ Showroom added successfully! Showroom ID: {showroom_id}")
+            print(f"\n Showroom added successfully Showroom ID: {showroom_id}")
             return True
         else:
-            print("\n✗ Failed to add showroom.")
+            print("\n Failed to add showroom.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -297,7 +296,7 @@ def update_showroom_details():
         showroom = storage.get_showroom_by_id(showroom_id)
         
         if not showroom:
-            print(f"\n✗ Showroom with ID {showroom_id} not found.")
+            print(f"\n Showroom with ID {showroom_id} not found.")
             return False
         
         print(f"\nCurrent: {showroom.name} at {showroom.location}")
@@ -308,14 +307,14 @@ def update_showroom_details():
         phone = input(f"New Phone [{showroom.phone}]: ").strip() or showroom.phone
         
         if storage.update_showroom(showroom_id, name=name, location=location, phone=phone):
-            print(f"\n✓ Showroom updated successfully!")
+            print(f"\n Showroom updated successfully")
             return True
         else:
-            print("\n✗ Failed to update showroom.")
+            print("\n Failed to update showroom.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -326,11 +325,11 @@ def delete_showroom_admin(admin_id):
         showroom = storage.get_showroom_by_id(showroom_id)
         
         if not showroom:
-            print(f"\n✗ Showroom with ID {showroom_id} not found.")
+            print(f"\n Showroom with ID {showroom_id} not found.")
             return False
         
         if len(showroom.car_ids) > 0:
-            print(f"\n⚠️  Warning: This showroom has {len(showroom.car_ids)} car(s).")
+            print(f"\n  Warning: This showroom has {len(showroom.car_ids)} car(s).")
         
         confirm = input(f"Delete showroom '{showroom.name}'? (yes/no): ").strip().lower()
         
@@ -338,17 +337,17 @@ def delete_showroom_admin(admin_id):
             if storage.delete_showroom(showroom_id):
                 #record action in stack
                 storage.push_admin_action(admin_id, "delete", "showroom", showroom_id, showroom.name)
-                print(f"\n✓ Showroom deleted successfully!")
+                print(f"\n Showroom deleted successfully")
                 return True
             else:
-                print("\n✗ Failed to delete showroom.")
+                print("\n Failed to delete showroom.")
                 return False
         else:
             print("\n Deletion cancelled.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -395,14 +394,14 @@ def add_new_garage(admin_id):
         if storage.add_garage(garage):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "garage", garage_id, name)
-            print(f"\n✓ Garage added successfully! Garage ID: {garage_id}")
+            print(f"\n Garage added successfully Garage ID: {garage_id}")
             return True
         else:
-            print("\n✗ Failed to add garage.")
+            print("\n Failed to add garage.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -417,7 +416,7 @@ def update_garage_details():
         garage = storage.get_garage_by_id(garage_id)
         
         if not garage:
-            print(f"\n✗ Garage with ID {garage_id} not found.")
+            print(f"\n Garage with ID {garage_id} not found.")
             return False
         
         print(f"\nCurrent: {garage.name} at {garage.location}")
@@ -428,14 +427,14 @@ def update_garage_details():
         phone = input(f"New Phone [{garage.phone}]: ").strip() or garage.phone
         
         if storage.update_garage(garage_id, name=name, location=location, phone=phone):
-            print(f"\n✓ Garage updated successfully!")
+            print(f"\n Garage updated successfully")
             return True
         else:
-            print("\n✗ Failed to update garage.")
+            print("\n Failed to update garage.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -446,11 +445,11 @@ def delete_garage_admin(admin_id):
         garage = storage.get_garage_by_id(garage_id)
         
         if not garage:
-            print(f"\n✗ Garage with ID {garage_id} not found.")
+            print(f"\n Garage with ID {garage_id} not found.")
             return False
         
         if len(garage.service_ids) > 0:
-            print(f"\n⚠️  Warning: This garage offers {len(garage.service_ids)} service(s).")
+            print(f"\n  Warning: This garage offers {len(garage.service_ids)} service(s).")
         
         confirm = input(f"Delete garage '{garage.name}'? (yes/no): ").strip().lower()
         
@@ -458,17 +457,17 @@ def delete_garage_admin(admin_id):
             if storage.delete_garage(garage_id):
                 #record action in stack
                 storage.push_admin_action(admin_id, "delete", "garage", garage_id, garage.name)
-                print(f"\n✓ Garage deleted successfully!")
+                print(f"\n Garage deleted successfully")
                 return True
             else:
-                print("\n✗ Failed to delete garage.")
+                print("\n Failed to delete garage.")
                 return False
         else:
             print("\n Deletion cancelled.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -510,14 +509,14 @@ def add_new_service(admin_id):
         if storage.add_service(service):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "service", service_id, name)
-            print(f"\n✓ Service added successfully! Service ID: {service_id}")
+            print(f"\n Service added successfully Service ID: {service_id}")
             return True
         else:
-            print("\n✗ Failed to add service.")
+            print("\n Failed to add service.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -532,7 +531,7 @@ def update_service_details():
         service = storage.get_service_by_id(service_id)
         
         if not service:
-            print(f"\n✗ Service with ID {service_id} not found.")
+            print(f"\n Service with ID {service_id} not found.")
             return False
         
         print(f"\nCurrent: {service.name} - ${service.price:.2f}")
@@ -543,14 +542,14 @@ def update_service_details():
         price = float(price_input) if price_input else service.price
         
         if storage.update_service(service_id, name=name, price=price):
-            print(f"\n✓ Service updated successfully!")
+            print(f"\n Service updated successfully")
             return True
         else:
-            print("\n✗ Failed to update service.")
+            print("\n Failed to update service.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -561,7 +560,7 @@ def delete_service_admin(admin_id):
         service = storage.get_service_by_id(service_id)
         
         if not service:
-            print(f"\n✗ Service with ID {service_id} not found.")
+            print(f"\n Service with ID {service_id} not found.")
             return False
         
         confirm = input(f"Delete service '{service.name}'? (yes/no): ").strip().lower()
@@ -570,17 +569,17 @@ def delete_service_admin(admin_id):
             if storage.delete_service(service_id):
                 #record action in stack
                 storage.push_admin_action(admin_id, "delete", "service", service_id, service.name)
-                print(f"\n✓ Service deleted successfully!")
+                print(f"\n Service deleted successfully")
                 return True
             else:
-                print("\n✗ Failed to delete service.")
+                print("\n Failed to delete service.")
                 return False
         else:
             print("\n Deletion cancelled.")
             return False
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
         return False
 
 
@@ -612,7 +611,7 @@ def process_next_service_request():
     
     storage.add_service_process(service_process)
     
-    print(f"\n✓ Service request completed!")
+    print(f"\n Service request completed")
     print(f"  Process ID: {process_id}")
     print(f"  Customer ID: {request['customer_id']}")
     if service:
@@ -639,11 +638,11 @@ def undo_last_action():
     
     #implement undo logic based on action type
     if action['action_type'] == 'delete':
-        print("⚠️  Note: Undo for delete operations requires manual restoration")
+        print("  Note: Undo for delete operations requires manual restoration")
     elif action['action_type'] == 'add':
-        print("⚠️  Note: Consider manually removing the added entity")
+        print("  Note: Consider manually removing the added entity")
     
-    print("✓ Action popped from stack")
+    print(" Action popped from stack")
     return action
 
 
@@ -831,13 +830,13 @@ def admin_menu(admin):
             elif choice == '27':
                 storage.save_all_data()
             elif choice == '28':
-                print("\n✓ Logging out from admin panel...")
+                print("\n Logging out from admin panel...")
                 break
             else:
-                print("\n✗ Invalid choice. Please enter a number between 1-28.")
+                print("\n Invalid choice. Please enter a number between 1-28.")
         
         except ValueError as e:
-            print(f"\n✗ Invalid input: {e}")
+            print(f"\n Invalid input: {e}")
         except Exception as e:
-            print(f"\n✗ An error occurred: {e}")
+            print(f"\n An error occurred: {e}")
             print("   Please try again.")

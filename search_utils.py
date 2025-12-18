@@ -1,4 +1,5 @@
 from models import Car, Showroom, Garage, Service
+import storage
 
 def search_cars(cars_list, filters):
     filtered_cars = []
@@ -34,13 +35,10 @@ def search_cars_in_showroom(showroom, all_cars, filters):
 
 def general_car_search(filters):
     """General car search across all cars with filters."""
-    import storage
     all_cars = storage.get_all_cars()
     
-    # If available_only flag is set, only return available cars
     if filters.get('available_only'):
         all_cars = [car for car in all_cars if car.available]
-        # Remove the flag from filters before passing to matches_filter
         filters = {k: v for k, v in filters.items() if k != 'available_only'}
     
     return search_cars(all_cars, filters)

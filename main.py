@@ -17,10 +17,10 @@ def admin_login():
     #hardcoded admin credentials (can be expanded to load from CSV)
     if username == "admin" and password == "admin123":
         admin = Admin(id=1, username=username, password=password)
-        print("\n✓ Admin login successful!")
+        print("\n Admin login successful")
         return admin
     else:
-        print("\n✗ Invalid admin credentials!")
+        print("\n Invalid admin credentials")
         return None
 
 
@@ -115,16 +115,16 @@ def admin_menu(admin):
                 storage.save_all_data()
             
             elif choice == '20':
-                print("\n✓ Logging out from admin panel...")
+                print("\n Logging out from admin panel")
                 break
             
             else:
-                print("\n✗ Invalid choice. Please enter a number between 1-20.")
+                print("\n Invalid choice. Please enter a number between 1-20.")
         
         except ValueError as e:
-            print(f"\n✗ Invalid input: {e}")
+            print(f"\n Invalid input: {e}")
         except Exception as e:
-            print(f"\n✗ An error occurred: {e}")
+            print(f"\n An error occurred: {e}")
             print("   Please try again.")
 
 
@@ -160,13 +160,13 @@ def add_new_car(admin_id):
         model = input("Car Model: ").strip()
         year = int(input("Year: ").strip())
         price = float(input("Price: ").strip())
-        installment = input("Installment available? (yes/no): ").strip().lower() in ['yes', 'y']
+        installment = input("Installment available (yes/no): ").strip().lower() in ['yes', 'y']
         showroom_id = int(input("Showroom ID: ").strip())
         
         #check if showroom exists
         showroom = storage.get_showroom_by_id(showroom_id)
         if not showroom:
-            print(f"\n✗ Showroom with ID {showroom_id} not found.")
+            print(f"\n Showroom with ID {showroom_id} not found.")
             return
         
         car_id = storage.next_id_for("car")
@@ -189,12 +189,12 @@ def add_new_car(admin_id):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "car", car_id, f"{make} {model}")
             
-            print(f"\n✓ Car added successfully! Car ID: {car_id}")
+            print(f"\n Car added successfully Car ID: {car_id}")
         else:
-            print("\n✗ Failed to add car.")
+            print("\n Failed to add car.")
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
 
 
 def update_car_admin():
@@ -208,7 +208,7 @@ def update_car_admin():
         car = storage.get_car_by_id(car_id)
         
         if not car:
-            print(f"\n✗ Car with ID {car_id} not found.")
+            print(f"\n Car with ID {car_id} not found.")
             return
         
         print(f"\nCurrent: {car.make} {car.model} ({car.year}) - ${car.price:,.2f}")
@@ -222,12 +222,12 @@ def update_car_admin():
         price = float(price_input) if price_input else car.price
         
         if storage.update_car(car_id, make=make, model=model, year=year, price=price):
-            print(f"\n✓ Car updated successfully!")
+            print(f"\n Car updated successfully")
         else:
-            print("\n✗ Failed to update car.")
+            print("\n Failed to update car.")
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
 
 
 def delete_car_admin(admin_id):
@@ -237,7 +237,7 @@ def delete_car_admin(admin_id):
         car = storage.get_car_by_id(car_id)
         
         if not car:
-            print(f"\n✗ Car with ID {car_id} not found.")
+            print(f"\n Car with ID {car_id} not found.")
             return
         
         confirm = input(f"Delete {car.make} {car.model} ({car.year})? (yes/no): ").strip().lower()
@@ -247,14 +247,14 @@ def delete_car_admin(admin_id):
             if storage.delete_car(car_id):
                 #record action in stack
                 storage.push_admin_action(admin_id, "delete", "car", car_id, car_info)
-                print(f"\n✓ Car deleted successfully!")
+                print(f"\n Car deleted successfully")
             else:
-                print("\n✗ Failed to delete car.")
+                print("\n Failed to delete car.")
         else:
             print("\n Deletion cancelled.")
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
 
 
 #admin operations - customers
@@ -316,12 +316,12 @@ def add_new_showroom(admin_id):
         if storage.add_showroom(showroom):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "showroom", showroom_id, name)
-            print(f"\n✓ Showroom added successfully! Showroom ID: {showroom_id}")
+            print(f"\n Showroom added successfully Showroom ID: {showroom_id}")
         else:
-            print("\n✗ Failed to add showroom.")
+            print("\n Failed to add showroom.")
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
 
 
 #admin operations - garages
@@ -367,12 +367,12 @@ def add_new_garage(admin_id):
         if storage.add_garage(garage):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "garage", garage_id, name)
-            print(f"\n✓ Garage added successfully! Garage ID: {garage_id}")
+            print(f"\n Garage added successfully Garage ID: {garage_id}")
         else:
-            print("\n✗ Failed to add garage.")
+            print("\n Failed to add garage.")
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
 
 
 #admin operations - services
@@ -413,12 +413,12 @@ def add_new_service(admin_id):
         if storage.add_service(service):
             #record action in stack
             storage.push_admin_action(admin_id, "add", "service", service_id, name)
-            print(f"\n✓ Service added successfully! Service ID: {service_id}")
+            print(f"\n Service added successfully Service ID: {service_id}")
         else:
-            print("\n✗ Failed to add service.")
+            print("\n Failed to add service.")
     
     except ValueError as e:
-        print(f"\n✗ Invalid input: {e}")
+        print(f"\n Invalid input: {e}")
 
 
 #admin operations - queue management
@@ -447,7 +447,7 @@ def process_next_service_request():
     
     storage.add_service_process(service_process)
     
-    print(f"\n✓ Service request completed!")
+    print(f"\n Service request completed")
     print(f"  Process ID: {process_id}")
     print(f"  Customer ID: {request['customer_id']}")
     if service:
@@ -469,7 +469,7 @@ def undo_last_action():
     if action['action_type'] == 'delete' and action['entity_type'] == 'car':
         print("Note: Undo for delete operations requires manual restoration")
     
-    print("✓ Action popped from stack")
+    print(" Action popped from stack")
 
 
 #admin operations - reservations
@@ -559,14 +559,14 @@ def main_menu():
         
         elif choice == '3':
             print("\n" + "=" * 60)
-            print("Saving data before exit...")
+            print("Saving data before exit")
             storage.save_all_data()
-            print("Thank you for using Car Showroom Management System!")
+            print("Thank you for using Car Showroom Management System")
             print("=" * 60)
             break
         
         else:
-            print("\n✗ Invalid choice. Please enter 1, 2, or 3.")
+            print("\n Invalid choice. Please enter 1, 2, or 3.")
 
 
 #entry point
@@ -579,7 +579,7 @@ if __name__ == "__main__":
         #load all data
         storage.load_all_data()
         
-        print("\n✓ System initialized successfully!")
+        print("\n System initialized successfully")
         
         #start main menu
         main_menu()
@@ -587,17 +587,17 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n\n" + "=" * 60)
         print("System interrupted by user")
-        print("Saving data...")
+        print("Saving data")
         storage.save_all_data()
         print("=" * 60)
         sys.exit(0)
     
     except Exception as e:
-        print(f"\n✗ Fatal error: {e}")
-        print("Attempting to save data...")
+        print(f"\n Fatal error: {e}")
+        print("Attempting to save data")
         try:
             storage.save_all_data()
-            print("✓ Data saved successfully")
+            print(" Data saved successfully")
         except:
-            print("✗ Failed to save data")
+            print(" Failed to save data")
         sys.exit(1)
