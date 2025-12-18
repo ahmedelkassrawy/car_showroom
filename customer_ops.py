@@ -256,11 +256,11 @@ def buy_car(customer_id, car_id):
         print(f" Car with ID {car_id} is not available for purchase.")
         return False
     
-    process_id = storage.next_id_for('buy_rent_processes')
+    process_id = storage.next_id_for('buy_rent_process')
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     buy_process = BuyRentProcess(
-        process_id = storage.next_id_for('buy_rent_processes'),
+        process_id = process_id,
         customer_id = customer_id,
         date = date,
         amount = car.price,
@@ -268,11 +268,11 @@ def buy_car(customer_id, car_id):
         type = "buy"
     )
 
-    storage.save_buy_rent_processes(buy_process)
+    storage.add_buy_rent_process(buy_process)
 
-    storage.update_car(car_id,available = False)
+    storage.update_car(car_id, available=0)
 
-    print(f"\n Congratulations You have successfully purchased:")
+    print(f"\n Congratulations! You have successfully purchased:")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Amount Paid: ${car.price:,.2f}")
     print(f" Date: {date}")
@@ -295,11 +295,11 @@ def rent_car(customer_id, car_id):
         return False
     
     rent_amount = car.price * 0.1
-    process_id = storage.next_id_for('buy_rent_processes')
+    process_id = storage.next_id_for('buy_rent_process')
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     rent_process = BuyRentProcess(
-        process_id = storage.next_id_for('buy_rent_processes'),
+        process_id = process_id,
         customer_id = customer_id,
         date = date,
         amount = rent_amount,
@@ -307,11 +307,11 @@ def rent_car(customer_id, car_id):
         type = "rent"
     )
 
-    storage.save_buy_rent_processes(rent_process)
+    storage.add_buy_rent_process(rent_process)
 
-    storage.update_car(car_id,available = False)
+    storage.update_car(car_id, available=0)
 
-    print(f"\n Congratulations You have successfully rented:")
+    print(f"\n Congratulations! You have successfully rented:")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Rental Amount: ${rent_amount:,.2f}")
     print(f" Date: {date}")
@@ -333,24 +333,27 @@ def reserve_car(customer_id, car_id, hours=24):
         return False
     
     reservation_id = storage.next_id_for("reservation")
+    
+    start = datetime.now()
+    expiry = start + timedelta(hours=hours)
 
     reservation = Reservation(
         reservation_id = reservation_id,
         customer_id = customer_id,
         car_id = car_id,
-        start_time = datetime.now(),
-        end_time = datetime.now() + timedelta(hours=hours)
+        start_time = start.strftime('%Y-%m-%d %H:%M:%S'),
+        expiry_time = expiry.strftime('%Y-%m-%d %H:%M:%S')
     )
 
-    storage.save_reservations(reservation)
+    storage.add_reservation(reservation)
     storage.update_car(car_id, available=0)
 
-    print(f"\n Car reserved successfully")
+    print(f"\n Car reserved successfully!")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Duration: {hours} hour(s)")
-    print(f" Expires: {reservation.end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f" Expires: {expiry.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f" Reservation ID: {reservation_id}")
-    print(f"\n  Please complete your purchase within {hours} hours")
+    print(f"\n  Please complete your purchase within {hours} hours!")
     
     return True
 
