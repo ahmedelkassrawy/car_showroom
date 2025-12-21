@@ -7,7 +7,6 @@ from models import Admin
 
 #admin authentication
 def admin_login():
-    """Admin login with hardcoded credentials."""
     print("\n" + "=" * 60)
     print("ADMIN LOGIN")
     print("=" * 60)
@@ -25,8 +24,6 @@ def admin_login():
 
 #admin menu
 def admin_menu(admin):
-    """Main admin menu interface."""
-    
     while True:
         print(f"\n{'='*60}")
         print(f" ADMIN PANEL - {admin.username}")
@@ -118,7 +115,7 @@ def admin_menu(admin):
                 break
             
             else:
-                print("\n Invalid choice. Please enter a number between 1-20.")
+                print("\n Wrong choice please enter a number between 1 and 20.")
         
         except ValueError as e:
             print(f"\n Invalid input: {e}")
@@ -129,7 +126,6 @@ def admin_menu(admin):
 
 #main menu
 def main_menu():
-    """Main application menu."""
     while True:
         print("\n" + "=" * 60)
         print("CAR SHOWROOM MANAGEMENT SYSTEM")
@@ -187,7 +183,7 @@ if __name__ == "__main__":
         print("Attempting to save data")
         try:
             storage.save_all_data()
-            print(" Data saved successfully")
+            print("Data saved successfully")
         except:
-            print(" Failed to save data")
+            print("Failed to save data")
         sys.exit(1)
