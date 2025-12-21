@@ -794,7 +794,6 @@ def delete_car(car_id):
     if car_id not in cars_by_id:
         return False
     
-    # Remove car from showroom if it exists
     car = cars_by_id[car_id]
     showroom = get_showroom_by_id(car.showroom_id)
     if showroom:
@@ -960,7 +959,6 @@ def delete_reservation(reservation_id):
     if reservation_id not in reservations_by_id:
         return False
     
-    # Make the car available again
     reservation = reservations_by_id[reservation_id]
     car = get_car_by_id(reservation.car_id)
     if car:
@@ -972,7 +970,7 @@ def delete_reservation(reservation_id):
     return True
 
 
-#helpers for processes (history)
+#helpers for processes
 def add_buy_rent_process(process_object):
     """Add a new buy/rent process to history."""
     buy_rent_history.append(process_object)
@@ -1145,7 +1143,7 @@ def view_service_request_queue():
     return service_request_queue
 
 
-#stack operations (LIFO - last in first out)
+#stack operations
 def push_admin_action(admin_id, action_type, entity_type, entity_id, details=""):
     """Push an admin action onto the stack (for undo functionality)."""
     action_id = len(admin_action_stack) + 1

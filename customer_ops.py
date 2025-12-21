@@ -4,10 +4,8 @@ import storage
 import search_utils
 
 
-#authentication functions
 def customer_register(username, password, phone):
     """Register a new customer account."""
-    #check if the customer exists or not
     if storage.get_customer_by_username(username):
         raise ValueError("Username already exists.")
     
@@ -25,7 +23,6 @@ def customer_register(username, password, phone):
         return None
 
 
-
 def customer_login(username, password):
     """Login an existing customer."""
     if not storage.get_customer_by_username(username):
@@ -37,9 +34,11 @@ def customer_login(username, password):
         return customer
     else:
         print("Incorrect password.")
-        return None        
+        return None    
 
-#car browsing and search functions
+#######################################    
+
+#car search
 def browse_all_cars():
     """Display all available cars."""
     cars = storage.get_all_cars()
@@ -66,7 +65,6 @@ def search_cars_interactive():
     if model:
         filters['model'] = model
     
-    # Year filter
     year = input("Year (e.g., 2024): ").strip()
     if year:
         try:
@@ -88,18 +86,16 @@ def search_cars_interactive():
         except ValueError:
             print("  Invalid max price, skipping")
     
-    installment = input("Installment available? (yes/no): ").strip().lower()
-    if installment in ['yes', 'y']:
+    installment = input("Installment available (yes/no): ").strip().lower()
+    if installment in ['yes', 'y','YES']:
         filters['installment'] = 1
-    elif installment in ['no', 'n']:
+    elif installment in ['no', 'n', 'NO']:
         filters['installment'] = 0
     
-    # Only show available cars
-    filters['available_only'] = True
 
+    filters['available_only'] = True
     results = search_utils.general_car_search(filters)
 
-    #if no results found
     if not results:
         print("No cars found matching the criteria.")
         return []
@@ -137,19 +133,19 @@ def view_car_details(car_id):
     return car
 
 
-#showroom and garage viewing
 def view_showrooms():
     """Display all showrooms."""
     showrooms = storage.get_all_showrooms()
     
     if not showrooms:
-        print("\n📭 No showrooms available.")
+        print("\n No showrooms available.")
         return []
     
     print(f"\n Available Showrooms ({len(showrooms)}):")
     print("=" * 80)
     for showroom in showrooms:
         car_count = len(showroom.car_ids)
+
         print(f"ID: {showroom.id} | {showroom.name}")
         print(f"Location: {showroom.location}")
         print(f"Phone: {showroom.phone}")
@@ -242,7 +238,7 @@ def view_services_in_garage(garage_id):
     return services
 
 
-#car purchase functions
+#car purchase 
 def buy_car(customer_id, car_id):
     """Process a car purchase."""
     #get car 
@@ -269,10 +265,9 @@ def buy_car(customer_id, car_id):
     )
 
     storage.add_buy_rent_process(buy_process)
-
     storage.update_car(car_id, available=0)
 
-    print(f"\n Congratulations! You have successfully purchased:")
+    print(f"\n Congratulations You have successfully purchased:")
     print(f" {car.make} {car.model} ({car.year})")
     print(f" Amount Paid: ${car.price:,.2f}")
     print(f" Date: {date}")
@@ -283,7 +278,6 @@ def buy_car(customer_id, car_id):
 
 def rent_car(customer_id, car_id):
     """Process a car rental."""
-    #get car 
     car = storage.get_car_by_id(car_id)
 
     if not car:
@@ -308,14 +302,13 @@ def rent_car(customer_id, car_id):
     )
 
     storage.add_buy_rent_process(rent_process)
-
     storage.update_car(car_id, available=0)
 
-    print(f"\n Congratulations! You have successfully rented:")
-    print(f" {car.make} {car.model} ({car.year})")
-    print(f" Rental Amount: ${rent_amount:,.2f}")
-    print(f" Date: {date}")
-    print(f" Transaction ID: {process_id}")
+    print(f"\n Congratulations. You have successfully rented:")
+    print(f"{car.make} {car.model} ({car.year})")
+    print(f"Rent Amount: ${rent_amount:,.2f}")
+    print(f"Date: {date}")
+    print(f"Transaction ID: {process_id}")
     
     return True
 
@@ -359,7 +352,7 @@ def reserve_car(customer_id, car_id, hours=24):
 
 
 def cancel_reservation(customer_id, reservation_id):
-    """Cancel a car reservation."""
+    """Cancel car reservation."""
     reservation = storage.get_reservation_by_id(reservation_id)
 
     if not reservation:
@@ -374,14 +367,13 @@ def cancel_reservation(customer_id, reservation_id):
     car = storage.get_car_by_id(reservation.car_id)
     storage.update_car(car.id, available=1)
 
-    print(f"\n Reservation cancelled successfully")
+    print(f"\nReservation cancelled successfully")
     if car.id:
-        print(f"{car.make} {car.model} is now available again.")
+        print(f"{car.make} {car.model} is now available")
     
     return True
 
 
-#service booking
 def view_my_service_requests(customer_id):
     """View customer's service requests in the queue."""
     queue = storage.service_request_queue
@@ -404,11 +396,11 @@ def view_my_service_requests(customer_id):
         garage_name = garage.name if garage else f"Garage #{req['garage_id']}"
         
         print(f"Request #{req['request_id']}")
-        print(f"  Position in Queue: {position}")
-        print(f"  Service: {service_name}")
-        print(f"  Garage: {garage_name}")
-        print(f"  Status: {req['status']}")
-        print(f"  Requested: {req['timestamp']}")
+        print(f"Position in Queue: {position}")
+        print(f"Service: {service_name}")
+        print(f"Garage: {garage_name}")
+        print(f"Status: {req['status']}")
+        print(f"Requested: {req['timestamp']}")
         print("-" * 80)
     
     return customer_requests
@@ -419,17 +411,17 @@ def book_service(customer_id, service_id, garage_id):
     service = storage.get_service_by_id(service_id)
 
     if not service:
-        print(f" Service with ID {service_id} not found.")
+        print(f"Service with ID {service_id} not found.")
         return False
 
     garage = storage.get_garage_by_id(garage_id)
 
     if not garage:
-        print(f" Garage with ID {garage_id} not found.")
+        print(f"Garage with ID {garage_id} not found.")
         return False
 
     if service_id not in garage.service_ids:
-        print(f" Service ID {service_id} is not offered at Garage ID {garage_id}.")
+        print(f"Service ID {service_id} is not offered at Garage ID {garage_id}.")
         return False
     
     request_id = storage.enqueue_service_request(customer_id, service_id, garage_id)
@@ -457,8 +449,6 @@ def view_customer_history(customer_id):
         return
     
     buy_rent_processes = storage.get_customer_buy_rent_history(customer_id)
-    
-
     service_processes = storage.get_customer_service_history(customer_id)
     
     print(f"\n{'='*80}")
@@ -607,7 +597,6 @@ def customer_menu(customer):
             print("   Please try again.")
 
 
-#main authentication flow
 def main_customer_flow():
     """Main customer authentication and menu flow."""
     while True:

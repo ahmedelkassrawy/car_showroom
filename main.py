@@ -14,7 +14,6 @@ def admin_login():
     username = input("Admin Username: ").strip()
     password = input("Admin Password: ").strip()
     
-    #hardcoded admin credentials (can be expanded to load from CSV)
     if username == "admin" and password == "admin123":
         admin = Admin(id=1, username=username, password=password)
         print("\n Admin login successful")
@@ -128,7 +127,7 @@ def admin_menu(admin):
             print("   Please try again.")
 
 
-#admin operations - cars
+#admin operations
 def view_all_cars():
     """View all cars in the system."""
     cars = storage.get_all_cars()
@@ -182,11 +181,9 @@ def add_new_car(admin_id):
         )
         
         if storage.add_car(car):
-            #add car to showroom
             showroom.add_car(car_id)
             storage.save_showrooms()
             
-            #record action in stack
             storage.push_admin_action(admin_id, "add", "car", car_id, f"{make} {model}")
             
             print(f"\n Car added successfully Car ID: {car_id}")
@@ -245,7 +242,7 @@ def delete_car_admin(admin_id):
         if confirm in ['yes', 'y']:
             car_info = f"{car.make} {car.model}"
             if storage.delete_car(car_id):
-                #record action in stack
+                
                 storage.push_admin_action(admin_id, "delete", "car", car_id, car_info)
                 print(f"\n Car deleted successfully")
             else:
@@ -314,7 +311,7 @@ def add_new_showroom(admin_id):
         )
         
         if storage.add_showroom(showroom):
-            #record action in stack
+            
             storage.push_admin_action(admin_id, "add", "showroom", showroom_id, name)
             print(f"\n Showroom added successfully Showroom ID: {showroom_id}")
         else:
@@ -365,7 +362,7 @@ def add_new_garage(admin_id):
         )
         
         if storage.add_garage(garage):
-            #record action in stack
+            
             storage.push_admin_action(admin_id, "add", "garage", garage_id, name)
             print(f"\n Garage added successfully Garage ID: {garage_id}")
         else:
@@ -411,7 +408,7 @@ def add_new_service(admin_id):
         )
         
         if storage.add_service(service):
-            #record action in stack
+            
             storage.push_admin_action(admin_id, "add", "service", service_id, name)
             print(f"\n Service added successfully Service ID: {service_id}")
         else:
@@ -455,7 +452,7 @@ def process_next_service_request():
         print(f"  Amount: ${service.price:.2f}")
 
 
-#admin operations - stack management
+#admin operations
 def undo_last_action():
     """Undo the last admin action."""
     action = storage.pop_admin_action()
@@ -465,14 +462,13 @@ def undo_last_action():
     
     print(f"\nUndoing action: {action['action_type']} {action['entity_type']} #{action['entity_id']}")
     
-    #implement undo logic based on action type
     if action['action_type'] == 'delete' and action['entity_type'] == 'car':
         print("Note: Undo for delete operations requires manual restoration")
     
     print(" Action popped from stack")
 
 
-#admin operations - reservations
+#reservations
 def view_all_reservations():
     """View all reservations in the system."""
     reservations = storage.get_all_reservations()
@@ -569,19 +565,17 @@ def main_menu():
             print("\n Invalid choice. Please enter 1, 2, or 3.")
 
 
-#entry point
+
 if __name__ == "__main__":
     try:
         print("\n" + "=" * 60)
         print("INITIALIZING CAR SHOWROOM MANAGEMENT SYSTEM")
         print("=" * 60)
         
-        #load all data
         storage.load_all_data()
         
         print("\n System initialized successfully")
         
-        #start main menu
         main_menu()
         
     except KeyboardInterrupt:

@@ -2,7 +2,7 @@ from datetime import datetime
 from models import Admin, Car, Showroom, Garage, Service, ServiceProcess
 import storage
 
-#authentication functions
+#authentication 
 def admin_login(username, password):
     """Admin login with hardcoded credentials."""
     if username == "admin" and password == "admin123":
@@ -14,7 +14,7 @@ def admin_login(username, password):
         return None
 
 
-#car management functions
+#car management 
 def view_all_cars():
     """View all cars in the system."""
     cars = storage.get_all_cars()
@@ -68,11 +68,9 @@ def add_new_car(admin_id):
         )
         
         if storage.add_car(car):
-            #add car to showroom
             showroom.add_car(car_id)
             storage.save_showrooms()
             
-            #record action in stack
             storage.push_admin_action(admin_id, "add", "car", car_id, f"{make} {model}")
             
             print(f"\n Car added successfully Car ID: {car_id}")
@@ -137,7 +135,7 @@ def delete_car_admin(admin_id):
         if confirm in ['yes', 'y']:
             car_info = f"{car.make} {car.model}"
             if storage.delete_car(car_id):
-                #record action in stack
+                
                 storage.push_admin_action(admin_id, "delete", "car", car_id, car_info)
                 print(f"\n Car deleted successfully")
                 return True
@@ -153,7 +151,7 @@ def delete_car_admin(admin_id):
         return False
 
 
-#customer management functions
+#customer management 
 def view_all_customers():
     """View all customers in the system."""
     customers = storage.get_all_customers()
@@ -184,7 +182,7 @@ def view_customer_details(customer_id):
     print(f"Username: {customer.username}")
     print(f"Phone: {customer.phone}")
     
-    #show transaction history
+    #transaction history
     buy_rent = storage.get_customer_buy_rent_history(customer_id)
     service = storage.get_customer_service_history(customer_id)
     reservations = storage.get_customer_reservations(customer_id)
@@ -215,7 +213,7 @@ def delete_customer_admin(admin_id):
         
         if confirm in ['yes', 'y']:
             if storage.delete_customer(customer_id):
-                #record action in stack
+                
                 storage.push_admin_action(admin_id, "delete", "customer", customer_id, customer.username)
                 print(f"\n Customer deleted successfully")
                 return True
@@ -231,7 +229,7 @@ def delete_customer_admin(admin_id):
         return False
 
 
-#showroom management functions
+#showroom management
 def view_all_showrooms():
     """View all showrooms in the system."""
     showrooms = storage.get_all_showrooms()
@@ -272,7 +270,6 @@ def add_new_showroom(admin_id):
         )
         
         if storage.add_showroom(showroom):
-            #record action in stack
             storage.push_admin_action(admin_id, "add", "showroom", showroom_id, name)
             print(f"\n Showroom added successfully Showroom ID: {showroom_id}")
             return True
@@ -335,7 +332,6 @@ def delete_showroom_admin(admin_id):
         
         if confirm in ['yes', 'y']:
             if storage.delete_showroom(showroom_id):
-                #record action in stack
                 storage.push_admin_action(admin_id, "delete", "showroom", showroom_id, showroom.name)
                 print(f"\n Showroom deleted successfully")
                 return True
@@ -351,7 +347,7 @@ def delete_showroom_admin(admin_id):
         return False
 
 
-#garage management functions
+#garage management 
 def view_all_garages():
     """View all garages in the system."""
     garages = storage.get_all_garages()
@@ -392,7 +388,6 @@ def add_new_garage(admin_id):
         )
         
         if storage.add_garage(garage):
-            #record action in stack
             storage.push_admin_action(admin_id, "add", "garage", garage_id, name)
             print(f"\n Garage added successfully Garage ID: {garage_id}")
             return True
@@ -455,7 +450,7 @@ def delete_garage_admin(admin_id):
         
         if confirm in ['yes', 'y']:
             if storage.delete_garage(garage_id):
-                #record action in stack
+                
                 storage.push_admin_action(admin_id, "delete", "garage", garage_id, garage.name)
                 print(f"\n Garage deleted successfully")
                 return True
@@ -471,7 +466,7 @@ def delete_garage_admin(admin_id):
         return False
 
 
-#service management functions
+#service management 
 def view_all_services():
     """View all services in the system."""
     services = storage.get_all_services()
@@ -507,7 +502,7 @@ def add_new_service(admin_id):
         )
         
         if storage.add_service(service):
-            #record action in stack
+            
             storage.push_admin_action(admin_id, "add", "service", service_id, name)
             print(f"\n Service added successfully Service ID: {service_id}")
             return True
@@ -567,7 +562,7 @@ def delete_service_admin(admin_id):
         
         if confirm in ['yes', 'y']:
             if storage.delete_service(service_id):
-                #record action in stack
+                
                 storage.push_admin_action(admin_id, "delete", "service", service_id, service.name)
                 print(f"\n Service deleted successfully")
                 return True
@@ -583,7 +578,7 @@ def delete_service_admin(admin_id):
         return False
 
 
-#queue management functions
+#queue management 
 def view_service_queue():
     """View the service request queue."""
     return storage.view_service_request_queue()
@@ -621,7 +616,7 @@ def process_next_service_request():
     return service_process
 
 
-#stack management functions
+#stack management 
 def view_admin_actions():
     """View recent admin actions from the stack."""
     return storage.view_admin_action_stack()
@@ -636,7 +631,6 @@ def undo_last_action():
     
     print(f"\nUndoing action: {action['action_type']} {action['entity_type']} #{action['entity_id']}")
     
-    #implement undo logic based on action type
     if action['action_type'] == 'delete':
         print("  Note: Undo for delete operations requires manual restoration")
     elif action['action_type'] == 'add':
@@ -646,7 +640,7 @@ def undo_last_action():
     return action
 
 
-#reservation management functions
+#reservation management 
 def view_all_reservations():
     """View all reservations in the system."""
     reservations = storage.get_all_reservations()
@@ -709,7 +703,6 @@ def view_system_statistics():
     print(f"\nReservations:")
     print(f"  Active Reservations: {len(storage.get_all_reservations())}")
     
-    #revenue
     total_buy_rent = sum(p.amount for p in buy_rent)
     total_service = sum(p.amount for p in service_processes)
     print(f"\nRevenue:")
